@@ -1,10 +1,12 @@
 package BinClass;
 
-public class Object {
+public class BinObject {
     private double weight;
+    private boolean packed;
 
-    public Object(double weight) {
+    public BinObject(double weight,boolean packed) {
         this.weight = weight;
+        this.packed = packed;
     }
 
     public double getWeight() {
