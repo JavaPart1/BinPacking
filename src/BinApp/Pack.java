@@ -10,7 +10,7 @@ public class Pack {
     public static void main(String[] args) {
         // declarations & initializations
         Scanner input = new Scanner(System.in);
-        BinContainer container = new BinContainer();
+        BinContainer container = new BinContainer(); // temp container
         ArrayList<BinContainer> mainContainers = new ArrayList<>();
 
         // input hoeveel objecten
@@ -49,9 +49,27 @@ public class Pack {
             }
         }
         // zet de objecten in containers
-        for (int i = 0; i < mainObjects.size() ; i++) {
-
-
+        int gepacked = 0;
+        do {
+            container = new BinContainer(); // eerste te gebruiken container
+            for (int i = 0; i < mainObjects.size() ; i++) {
+                if (!mainObjects.get(i).isPacked()){
+                    if ((container.getLoadWeight()+mainObjects.get(i).getWeight())
+                            <= container.getMaxWeight()){
+                        container.addBins(mainObjects.get(i));
+                        mainObjects.get(i).setPacked(true);
+                        gepacked++;
+                    }
+                }
+            }
+            mainContainers.add(container);
+        } while (gepacked < mainObjects.size());
+        // afprinten vn containers
+        for (int i = 0; i < mainContainers.size() ; i++) {
+            System.out.println("Container " + i + " contains objects with weight : ");
+            for (int j = 0; j < mainObjects.size(); j++) {
+                System.out.println(mainContainers.get(i).getObjects().get(j).getWeight());
+            }
         }
     }
 }

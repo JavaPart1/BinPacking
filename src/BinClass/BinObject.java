@@ -9,6 +9,14 @@ public class BinObject {
         this.packed = packed;
     }
 
+    public void setPacked(boolean packed) {
+        this.packed = packed;
+    }
+
+    public boolean isPacked() {
+        return packed;
+    }
+
     public double getWeight() {
         return weight;
     }
