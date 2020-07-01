@@ -14,7 +14,7 @@ public class Pack {
         ArrayList<BinContainer> mainContainers = new ArrayList<>();
 
         // input hoeveel objecten
-        System.out.print("How many objects to store in containers ?");
+        System.out.print("How many objects to store in containers ? ");
         int nbrOffObjects  = input.nextInt();
 
         // input weight vn elk object en zet in arraylist
@@ -23,8 +23,8 @@ public class Pack {
         Double userInput;
         for (int i = 0; i < nbrOffObjects; i++) {
             do {
-                System.out.println("Weight of object (must be < " +
-                        container.getMaxWeight() + " for object " + i + " : ");
+                System.out.print("Weight (must be < " +
+                        container.getMaxWeight() + ") for object " + i + " : ");
                 userInput = input.nextDouble();
 
             } while (userInput > container.getMaxWeight());
@@ -32,7 +32,7 @@ public class Pack {
             mainObjects.add(bob);
         }
 
-        // sorteer arraylist op weight groot nr klein
+        /* sorteer arraylist op weight groot nr klein
         BinObject temp1 = new BinObject(0,false);
         BinObject temp2 = new BinObject(0,false);
         for (int i = 1; i < (mainObjects.size()-1) ; i++) {
@@ -47,7 +47,7 @@ public class Pack {
                 }
 
             }
-        }
+        }*/
         // zet de objecten in containers
         int gepacked = 0;
         do {
@@ -64,12 +64,22 @@ public class Pack {
             }
             mainContainers.add(container);
         } while (gepacked < mainObjects.size());
+
         // afprinten vn containers
+        System.out.println(" ");//cr
         for (int i = 0; i < mainContainers.size() ; i++) {
-            System.out.println("Container " + i + " contains objects with weight : ");
-            for (int j = 0; j < mainObjects.size(); j++) {
-                System.out.println(mainContainers.get(i).getObjects().get(j).getWeight());
+            System.out.print("Container " + i + " contains objects with weight : ");
+            for (int j = 0; j < mainContainers.get(i).getObjects().size(); j++) {
+                System.out.print(mainContainers.get(i).getObjects().get(j).getWeight() +
+                        " ");
             }
+            System.out.print(" ; total weight: " +
+                    mainContainers.get(i).getLoadWeight() +
+                    " pounds");
+            System.out.println(" ; marge: " +
+                    (mainContainers.get(i).getMaxWeight() -
+                            mainContainers.get(i).getLoadWeight()) +
+                    " pounds");
         }
     }
 }
