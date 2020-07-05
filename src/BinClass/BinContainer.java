@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class BinContainer {
     private double maxWeight = 10.0;
     private double loadWeight;
-    private ArrayList<BinObject> objects = new ArrayList<>();
+    private ArrayList<BinObject> loadedbins = new ArrayList<>();
 
     public BinContainer() {
         this.loadWeight = 0;
@@ -19,12 +19,30 @@ public class BinContainer {
         return maxWeight;
     }
 
-    public void addBins(BinObject loadbin) {
-        this.objects.add(loadbin);
-        this.loadWeight += loadbin.getWeight();
+    public double getFreeWeight() {
+        return maxWeight - loadWeight;
+    }
+
+    public boolean addBin(BinObject loadbin) {
+        if (this.getLoadWeight()+loadbin.getWeight() <= this.getMaxWeight()){
+            this.loadedbins.add(loadbin);
+            this.loadWeight += loadbin.getWeight();
+            loadbin.setPacked(true);
+            return true;
+        }
+        return false;
     }
 
     public ArrayList<BinObject> getObjects() {
-        return objects;
+        return loadedbins;
+    }
+
+    @Override
+    public String toString() {
+        return "BinContainer{" +
+                "maxWeight=" + maxWeight +
+                ", loadWeight=" + loadWeight +
+                ", loadedbins=" + loadedbins +
+                '}';
     }
 }
