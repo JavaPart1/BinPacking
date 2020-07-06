@@ -37,6 +37,23 @@ public class BinContainer {
         return loadedbins;
     }
 
+    public int bestsuitable(ArrayList<BinObject> sourceBins){
+        int bestSuitable = 0;
+        double restMarge = getMaxWeight();
+
+        for (int i = 0; i < sourceBins.size() ; i++) {
+            if (sourceBins.get(i).getWeight() <= getFreeWeight() &
+                    !sourceBins.get(i).isPacked()){
+                if (restMarge > getFreeWeight() - sourceBins.get(i).getWeight()){
+                    restMarge = getFreeWeight() - sourceBins.get(i).getWeight();
+                    bestSuitable = i;
+                }
+            }
+        }
+        return bestSuitable;
+
+    }
+
     @Override
     public String toString() {
         return "BinContainer{" +

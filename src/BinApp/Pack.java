@@ -13,15 +13,15 @@ public class Pack {
         Scanner input = new Scanner(System.in);
         WareHouse wareHouse = new WareHouse();
         BinContainer binContainer = new BinContainer();
-        wareHouse.addContainer(binContainer);
-        BinObject zomerdekbed;
-        ArrayList<BinObject> contObjects = new ArrayList<>();
+        wareHouse.addContainer(binContainer);// Push container in warehouse
+        BinObject binObject;
+        ArrayList<BinObject> tempObjects = new ArrayList<>();// Create temp arraylist for objects
 
-        // input hoeveel objecten
+        // input how many objects
         System.out.print("How many objects to store in containers ? ");
         int nbrOffObjects  = input.nextInt();
 
-        // input weight vn elk object en zet in arraylist
+        // input weight of objects
         Double inWeight;
         for (int i = 0; i < nbrOffObjects; i++) {
             do {
@@ -29,42 +29,38 @@ public class Pack {
                         binContainer.getMaxWeight() + ") for object " + i + " : ");
                 inWeight = input.nextDouble();
 
-            } while (inWeight > binContainer.getMaxWeight());
-            zomerdekbed = new BinObject();
-            zomerdekbed.setWeight(inWeight);
-            contObjects.add(zomerdekbed);
-
+            } while (inWeight > binContainer.getMaxWeight());// weight has to be < max
+            binObject = new BinObject();
+            binObject.setWeight(inWeight);
+            tempObjects.add(binObject);// Put each object in temp arraylist
         }
+        // Process objects in arraylist to best suit in containers
         int bestsuit;
         int lastContainer = 0;
-        for (int i = 0; i < contObjects.size() ; i++) {
-            System.out.println("bin " + i + " packed? "+ contObjects.get(i).isPacked());
-            if (!contObjects.get(i).isPacked()){
-                if (lastContainer >= wareHouse.getStoredContainers().size()){
-                    System.out.println("container bijmaken...");
+        for (int i = 0; i < tempObjects.size() ; i++) {
+            if (!tempObjects.get(i).isPacked()){// Objects already in container can be skipped
+                if (lastContainer >= wareHouse.getStoredContainers().size()){// need a new container
                     binContainer = new BinContainer();
                     wareHouse.getStoredContainers().add(binContainer);
                     lastContainer = wareHouse.getStoredContainers().size() - 1;
                 }
-                wareHouse.getStoredContainers().get(lastContainer).addBin(contObjects.get(i));
-                System.out.println("zet bin " + i + " in container " + lastContainer);
-                bestsuit = contObjects.size();
+                // Put object in container
+                wareHouse.getStoredContainers().get(lastContainer).addBin(tempObjects.get(i));
+                // Try to add more objects in container
+                bestsuit = tempObjects.size();
+                // While there is still room in container and while there are still objects to be packed
                 while (wareHouse.getStoredContainers().get(lastContainer).getFreeWeight() > 0 & bestsuit > 0){
-                    System.out.println("best passende zoeken...");
-                    // bepaal best passende
-                    bestsuit = bestsuitable(wareHouse.getStoredContainers().get(lastContainer),contObjects);
-                    // indien gevonden
+                    // What is the best suitable object for the container
+                    bestsuit = wareHouse.getStoredContainers().get(lastContainer).bestsuitable(tempObjects);
                     if (bestsuit > 0){
-                        System.out.println("best passende gevonden");
-                        wareHouse.getStoredContainers().get(lastContainer).addBin(contObjects.get(bestsuit));
+                        // Put the best object in the container
+                        wareHouse.getStoredContainers().get(lastContainer).addBin(tempObjects.get(bestsuit));
                     }
                 }
                 lastContainer++;
             }
         }
-        System.out.println("Aantal containers : " + wareHouse.getStoredContainers().size());
-
-        // afprinten vn containers
+        // print containers
         System.out.println(" ");//cr
         for (int i = 0; i < wareHouse.getStoredContainers().size() ; i++) {
             System.out.print("Container " + i + " contains objects with weight : ");
@@ -78,20 +74,5 @@ public class Pack {
             System.out.println(" ; marge: " +
                      wareHouse.getStoredContainers().get(i).getFreeWeight() + " pounds");
         }
-    }
-    public static int bestsuitable(BinContainer targetContainer,ArrayList<BinObject> sourceBins){
-        int bestSuitable = 0;
-        double restMarge = targetContainer.getMaxWeight();
-
-        for (int i = 0; i < sourceBins.size() ; i++) {
-            if (sourceBins.get(i).getWeight() <= targetContainer.getFreeWeight() &
-                    !sourceBins.get(i).isPacked()){
-                if (restMarge > targetContainer.getFreeWeight() - sourceBins.get(i).getWeight()){
-                    restMarge = targetContainer.getFreeWeight() - sourceBins.get(i).getWeight();
-                    bestSuitable = i;
-                }
-            }
-        }
-        return bestSuitable;
     }
 }
